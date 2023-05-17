@@ -2,20 +2,39 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Articles</h1>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
-        <div class="row">
-            @foreach($articles as $article)
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ $article->image }}" class="card-img-top" alt="{{ $article->title }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $article->title }}</h5>
-                            <p class="card-text">{{ $article->excerpt }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+        <h1>All Articles</h1>
+
+        <div class="mb-3">
+            <a href="{{ route('articles.create') }}" class="btn btn-primary">Add Article</a>
         </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Published At</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($articles as $article)
+                    <tr>
+                        <td>{{ $article->title }}</td>
+                        <td>{{ $article->category->name }}</td>
+                        <td>{{ $article->published_at }}</td>
+                        <td>
+                            <a href="{{ route('articles.edit', $article->id) }}" class="btn btn-primary">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 @endsection

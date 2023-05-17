@@ -1,10 +1,10 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Article extends Model
 {
@@ -13,31 +13,20 @@ class Article extends Model
     protected $fillable = [
         'title',
         'content',
-        'slug',
-        'image',
+        'author_id',
+        'category_id',
+        'image_url',
         'published_at',
     ];
-
-    protected $dates = ['published_at'];
-
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-
-    public function setTitleAttribute($value)
-    {
-        $this->attributes['title'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
-    }
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function tags()
+    public function author()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
+
 }

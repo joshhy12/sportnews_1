@@ -1,41 +1,67 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ArticlesController;
-use App\Http\Controllers\AdminController;
-use App\Models\Article;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
-// Public routes
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ArticleController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
 Route::get('/', function () {
-    $articles = Article::latest()->get();
+    $articles = App\Models\Article::all();
     return view('welcome', compact('articles'));
 });
 
-Route::get('/articles', [ArticlesController::class, 'index'])->name('articles.index');
-Route::get('/articles/{article}', [ArticlesController::class, 'show'])->name('articles.show');
+Route::get('/admin/login', 'App\Http\Controllers\Admin\Auth\LoginController@showLoginForm')->name('admin.login');
 
-// Authentication routes
 Auth::routes();
 
-// Protected routes (admin panel)
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    // Dashboard
-    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin', 'App\Http\Controllers\AdminController@index')->middleware(['auth', 'admin']);
+Route::get('/admin/users', [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('admin.users.index');
+Route::get('/admin/users/create', [\App\Http\Controllers\Admin\AdminUserController::class, 'create'])->name('admin.users.create');
+Route::post('/admin/users', [\App\Http\Controllers\Admin\AdminUserController::class, 'store'])->name('admin.users.store');
+Route::get('/admin/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'edit'])->name('admin.users.edit');
+Route::put('/admin/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('admin.users.update');
+Route::delete('/admin/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 
-    // Articles
-    Route::get('/articles', [AdminController::class, 'articles'])->name('admin.articles');
-    Route::get('/articles/create', [AdminController::class, 'createArticle'])->name('admin.articles.create');
-    Route::post('/articles', [AdminController::class, 'storeArticle'])->name('admin.articles.store');
-    Route::get('/articles/{article}/edit', [AdminController::class, 'editArticle'])->name('admin.articles.edit');
-    Route::put('/articles/{article}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
-    Route::delete('/articles/{article}', [AdminController::class, 'destroyArticle'])->name('admin.articles.destroy');
+Route::get('/articles', 'App\Http\Controllers\ArticleController@index')->name('articles.index');
+Route::get('/articles/create', 'App\Http\Controllers\ArticleController@create')->name('articles.create');
+Route::post('/articles', [App\Http\Controllers\ArticleController::class, 'store'])->name('articles.store');
+Route::get('/articles/{article}/edit', 'App\Http\Controllers\ArticleController@edit')->name('articles.edit');
+Route::put('/articles/{article}', 'App\Http\Controllers\ArticleController@update')->name('articles.update');
 
-    // Categories
-    Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories');
-    Route::get('/categories/create', [AdminController::class, 'createCategory'])->name('admin.categories.create');
-    Route::post('/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
-    Route::get('/categories/{category}/edit', [AdminController::class, 'editCategory'])->name('admin.categories.edit');
-    Route::put('/categories/{category}', [AdminController::class, 'updateCategory'])->name('admin.categories.update');
-    Route::delete('/categories/{category}', [AdminController::class, 'destroyCategory'])->name('admin.categories.destroy');
-});
+
+Route::resource('categories', 'App\Http\Controllers\CategoryController');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('storage/{filename}', function ($filename) {
+    $path = storage_path('app/public/' . $filename);
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+})->name('storage');

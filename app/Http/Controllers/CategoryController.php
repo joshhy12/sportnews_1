@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
     public function index()
     {
         $categories = Category::all();
-
         return view('categories.index', compact('categories'));
     }
 
@@ -22,34 +20,49 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:categories',
-            'slug' => 'required|unique:categories',
+            'name' => 'required',
+            'description' => 'required',
         ]);
 
-        $category = Category::create($request->all());
+        $category = Category::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ]);
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        if ($category) {
+            return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to create category.');
+        }
     }
 
-    public function edit(Category $category)
+
+    public function edit($id)
     {
+        $category = Category::findOrFail($id);
         return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:categories,name,' . $category->id,
-            'slug' => 'required|unique:categories,slug,' . $category->id,
+            'name' => 'required|unique:categories,name,' . $id,
+            'description' => 'required'
         ]);
 
-        $category->update($request->all());
+        $category = Category::findOrFail($id);
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->save();
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
-    public function destroy(Category $category)
+
+    public function destroy($id)
     {
+        $category = Category::findOrFail($id);
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
