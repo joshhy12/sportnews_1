@@ -2,20 +2,78 @@
 
 @section('content')
 <div class="container">
-    <h1>Welcome to Our Article Page</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Dashboard') }}</div>
 
-    @foreach ($articles as $article)
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">
-                {{ $article->title }}
-            </h5>
+                <div class="card-body">
+                    <h1>Welcome to Our Article Page</h1>
 
-            <img src="{{ asset('storage/' . $article->image_url) }}" alt="{{ $article->title }}" class="article-image">
-            <p class="card-text">{{ $article->body }}</p>
-            <p class="card-text"><small class="text-muted">{{ $article->created_at->format('F j, Y') }}</small></p>
+                    <p class="card-text"><small class="text-muted"></small></p>
+
+                    @foreach ($articles->sortByDesc('created_at')->take(5) as $article)
+                    <div class="mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a>
+                                </h5>
+                                <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image" style="max-width: 80%; height: auto;">
+                                <p class="card-text">Category: {{ $article->category->name }}</p>
+                                <p class="card-text"><small class="text-muted">Published Date: {{ $article->created_at->format('F j, Y') }}</small></p>
+                                <a href="{{ route('articles.show', $article->id) }}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <h5 class="card-header">Search</h5>
+                <div class="card-body">
+                    <form action="{{ route('articles.search') }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="searchtitle" class="form-control" placeholder="Search for..." required>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit">Go!</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">{{ __('Latest Articles') }}</div>
+                <div class="card-body">
+                    <ul>
+                        @foreach ($articles->sortByDesc('created_at')->take(5) as $article)
+                        <li><a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+
+            <br>
+            <div class="card">
+                <div class="card-header">{{ __('Category Links') }}</div>
+                <div class="card-body">
+                    <ul>
+
+                    </ul>
+                </div>
+            </div>
+            <br>
+
         </div>
     </div>
-    @endforeach
+</div>
 </div>
 @endsection
+

@@ -29,7 +29,7 @@
                     @endforeach
                 </select>
             </div>
-            <input type="hidden" name="author_id" value="{{ auth()->user()->id }}">
+
             <div class="form-group">
                 <label for="image">Image</label>
                 <input type="file" class="form-control-file" id="image" name="image">

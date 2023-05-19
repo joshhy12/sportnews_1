@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->text('content');
-            $table->unsignedBigInteger('author_id');
             $table->unsignedBigInteger('article_id');
             $table->timestamps();
 
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
         });
     }

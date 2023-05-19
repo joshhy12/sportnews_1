@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Article;
 
 class CategoryController extends Controller
 {
@@ -11,6 +12,22 @@ class CategoryController extends Controller
         $categories = Category::all();
         return view('categories.index', compact('categories'));
     }
+
+
+    public function search(Request $request)
+{
+    $query = $request->input('query');
+
+    if ($query) {
+        $categories = Category::where('name', 'like', "%$query%")
+            ->get();
+    } else {
+        $categories = collect(); // Empty collection when query is empty
+    }
+
+    return view('categories.search', compact('categories', 'query'));
+}
+
 
     public function create()
     {
@@ -66,5 +83,17 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+
     }
+
+
+    public function show(Category $category)
+{
+    // Retrieve the category details and any related data you need
+    $category = $category->load('articles'); // Assuming you have a relationship named 'articles' in your Category model
+
+    // Pass the category data to the view
+    return view('categories.show', compact('category'));
+}
+
 }

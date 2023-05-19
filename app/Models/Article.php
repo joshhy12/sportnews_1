@@ -19,6 +19,19 @@ class Article extends Model
         'published_at',
     ];
 
+    protected $dates = ['created_at'];
+
+    public static function search($query)
+    {
+        return self::where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('title', 'like', "%$query%")
+                ->orWhereHas('category', function ($categoryQuery) use ($query) {
+                    $categoryQuery->where('name', 'like', "%$query%");
+                });
+        })->get();
+    }
+
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -28,5 +41,4 @@ class Article extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }

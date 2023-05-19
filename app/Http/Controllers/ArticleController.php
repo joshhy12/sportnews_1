@@ -14,9 +14,17 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::orderBy('created_at', 'desc')->get();
         return view('articles.index', compact('articles'));
     }
+
+
+    public function test()
+    {
+        return view('articles.test');
+    }
+
+
 
     public function create()
     {
@@ -39,7 +47,7 @@ class ArticleController extends Controller
         $article->title = $request->input('title');
         $article->content = $request->input('content');
         $article->category_id = $request->input('category_id');
-        $article->author_id = auth()->user()->id; // Set the current user's ID as the author ID
+    //    $article->author_id = auth()->user()->id; // Set the current user's ID as the author ID
         $article->published_at = $request->input('published_at');
 
         if ($request->hasFile('image')) {
@@ -79,5 +87,40 @@ public function update(Request $request, $id)
 
     return redirect()->route('articles.index')->with('success', 'Article updated successfully.');
 }
+
+public function show($id)
+{
+    $article = Article::findOrFail($id);
+    return view('articles.article-details', compact('article'));
+}
+
+
+
+
+public function search(Request $request)
+{
+    $query = $request->input('query');
+
+    if ($query) {
+        $articles = Article::whereHas('category', function ($categoryQuery) use ($query) {
+            $categoryQuery->where('name', 'like', "%$query%");
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
+    } else {
+        $articles = collect(); // Empty collection when query is empty
+    }
+
+    return view('articles.search', compact('articles', 'query'));
+}
+
+
+
+
+
+
+
+
+
 
 }
