@@ -1,19 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.home')
 
 @section('content')
     <div class="container">
-
-
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <h1>All Categories</h1>
-
-        <div class="mb-3">
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">Add Category</a>
-        </div>
 
         <table class="table">
             <thead>
@@ -27,7 +21,7 @@
             <tbody>
                 @foreach($categories as $category)
                     <tr>
-                        <td>{{ $category->name }}</td>
+                        <td> <li><a href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li></td>
                         <td>{{ $category->description }}</td>
                         <td>
                             <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary">Edit</a>
@@ -44,4 +38,5 @@
             </tbody>
         </table>
     </div>
+
 @endsection

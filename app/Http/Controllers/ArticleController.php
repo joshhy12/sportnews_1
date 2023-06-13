@@ -15,15 +15,9 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::orderBy('created_at', 'desc')->get();
-        return view('articles.index', compact('articles'));
+        $categories = Category::all();
+        return view('articles.index', compact('articles', 'categories'));
     }
-
-
-    public function test()
-    {
-        return view('articles.test');
-    }
-
 
 
     public function create()
@@ -62,38 +56,53 @@ class ArticleController extends Controller
 
 
     public function edit($id)
-{
-    $article = Article::findOrFail($id);
-    $categories = Category::all(); // Fetch all categories
+    {
+        $article = Article::findOrFail($id);
+        $articles = Article::orderBy('created_at', 'desc')->take(5)->get();
+        $categories = Category::all();
+        return view('articles.article-details', compact('article', 'articles', 'categories'));
+    }
 
-    return view('articles.edit', compact('article', 'categories'));
-}
 
+    public function update(Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'title' => 'required',
-        'content' => 'required',
-        'category_id' => 'required|exists:categories,id',
+        // Validate the request data
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'published_at' => 'nullable|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add image validation rules
+        ]);
 
-    ]);
+        // Update the article data
+        $article->title = $validatedData['title'];
+        $article->content = $validatedData['content'];
+        $article->category_id = $validatedData['category_id'];
+        $article->published_at = $validatedData['published_at'];
 
-    $article = Article::findOrFail($id);
-    $article->title = $request->input('title');
-    $article->content = $request->input('content');
-    $article->category_id = $request->input('category_id');
-    $article->save();
+        // Handle the image upload if a new image is provided
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('article_images', 'public');
+            $article->image = $imagePath;
+        }
 
-    return redirect()->route('articles.index')->with('success', 'Article updated successfully.');
-}
+        $article->save();
+
+        return redirect()->route('articles.show', $article->id)->with('success', 'Article updated successfully.');
+    }
+
 
 public function show($id)
 {
     $article = Article::findOrFail($id);
-    return view('articles.article-details', compact('article'));
+    $articles = Article::orderBy('created_at', 'desc')->take(5)->get();
+    $categories = Category::all();
+    return view('articles.article-details', compact('article', 'articles', 'categories'));
 }
-
 
 
 
@@ -113,14 +122,5 @@ public function search(Request $request)
 
     return view('articles.search', compact('articles', 'query'));
 }
-
-
-
-
-
-
-
-
-
 
 }

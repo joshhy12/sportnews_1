@@ -92,8 +92,17 @@ class CategoryController extends Controller
     // Retrieve the category details and any related data you need
     $category = $category->load('articles'); // Assuming you have a relationship named 'articles' in your Category model
 
-    // Pass the category data to the view
-    return view('categories.show', compact('category'));
+    // Retrieve the articles for the category
+    $articles = $category->articles;
+
+    // Retrieve all categories
+    $categories = Category::all();
+
+    // Pass the category, articles, and categories data to the view
+    return view('categories.show', compact('category', 'articles', 'categories'));
 }
+
+
+
 
 }

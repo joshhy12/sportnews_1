@@ -1,6 +1,6 @@
 <!-- resources/views/about.blade.php -->
 
-@extends('layouts.app')
+@extends('layouts.home')
 
 @section('content')
     <div class="container">

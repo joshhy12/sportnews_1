@@ -1,45 +1,85 @@
-@extends('layouts.app')
+@extends('layouts.home')
 
 @section('content')
-    <div class="container">
-        <h1>Edit Article</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Edit Article') }}</div>
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+                <div class="card-body">
+                    <form method="POST" action="{{ route('articles.update', $article->id) }}">
+                        @csrf
+                        @method('PUT')
 
-        <form method="POST" action="{{ route('articles.update', $article->id) }}" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ $article->title }}" required>
+                        <div class="form-group">
+                            <label for="title">{{ __('Title') }}</label>
+                            <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ $article->title }}" required autofocus>
+
+                            @error('title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="content">{{ __('Content') }}</label>
+                            <textarea id="content" class="form-control @error('content') is-invalid @enderror" name="content" rows="5" required>{{ $article->content }}</textarea>
+
+                            @error('content')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category_id">{{ __('Category') }}</label>
+                            <select id="category_id" class="form-control @error('category_id') is-invalid @enderror" name="category_id" required>
+                                @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ $category->id == $article->category_id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+
+                            @error('category_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="image">{{ __('Image') }}</label>
+                            <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+
+                            @error('image')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="published_at">{{ __('Published At') }}</label>
+                            <input id="published_at" type="text" class="form-control @error('published_at') is-invalid @enderror" name="published_at" value="{{ $article->published_at }}">
+
+                            @error('published_at')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Update') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="content">Content</label>
-                <textarea class="form-control" id="content" name="content" required>{{ $article->content }}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select id="category" name="category_id" class="form-control">
-                    <option value="">Select a category</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" @if($category->id === $article->category_id) selected @endif>{{ $category->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <input type="hidden" name="author_id" value="{{ $article->author_id }}">
-            <div class="form-group">
-                <label for="image">Image</label>
-                <input type="file" class="form-control-file" id="image" name="image">
-            </div>
-            <div class="form-group">
-                <label for="published_at">Published At</label>
-                <input type="date" class="form-control" id="published_at" name="published_at" value="{{ $article->published_at ? \Carbon\Carbon::parse($article->published_at)->format('Y-m-d') : '' }}">
-            </div>
-            <button type="submit" class="btn btn-primary">Update Article</button>
-        </form>
+        </div>
     </div>
+</div>
 @endsection

@@ -1,0 +1,42 @@
+/* CSS styles for the application */
+
+/* Define styles for specific HTML elements or classes */
+
+/* Example styles */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+
+  h1 {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center; /* Center align the h1 element */
+  }
+
+  p {
+    color: #666;
+    font-size: 14px;
+  }
+
+  /* Additional styles */
+
+  a {
+    color:#24366b;
+    text-decoration: none; /* Remove underline */
+  }
+
+  a:hover {
+    color: rgb(31, 176, 238);
+  }
+  /* More styles... */
+
+  .article-image {
+    max-width: 100%; /* Make the image fit within its container */
+    max-height: 100%; /* Make the image fit within its container */
+    object-fit: contain; /* Scale down proportionally to fit within the container */
+  }
+
+
