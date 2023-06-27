@@ -9,7 +9,7 @@
 </head>
 
 <body .fixed-div { position: sticky; top: 0px; /* Adjust the value as needed */ }>
-    @extends('layouts.home')
+    @extends('layouts.admin')
     @section('content')
 
     <div class="row justify-content-center">
@@ -48,7 +48,7 @@
             </div>
 
             <div class="card">
-                <div class="card-header">{{ __('Latest Articles of Category') }}</div>
+                <div class="card-header">{{ __('Related Articles of Category') }}</div>
                 <div class="card-body">
                 <ul>
                             @foreach ($articles as $article)

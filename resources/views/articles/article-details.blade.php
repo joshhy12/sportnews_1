@@ -10,47 +10,49 @@
             <div class="card">
                 <div class="card-header">{{ __('Read Articles') }}</div>
                 <div class="container">
-    <h1>{{ $article->title }}</h1>
+                    <h1>{{ $article->title }}</h1>
 
-    <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image" >
-    <p>{{ $article->content }}</p>
-    <p>Published on: {{ $article->published_at }}</p>
-    <p>Category: {{ $article->category->name }}</p>
+                    <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image">
+                    <p>{{ $article->content }}</p>
+                    <p>Published on: {{ $article->published_at }}</p>
+                    <p>Category: {{ $article->category->name }}</p>
 
-    <div class="mt-4">
-        <h3>Comments</h3>
-        @if ($article->comments && $article->comments->count() > 0)
+                    <div class="mt-4">
+                        <h3>Comments</h3>
+                        @if ($article->comments && $article->comments->count() > 0)
 
-        @foreach ($article->comments as $comment)
-        <div class="card mt-2">
-            <div class="card-body">
-                <h5 class="card-title">{{ $comment->user->name }}</h5>
-                <p class="card-text">{{ $comment->content }}</p>
-                <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
-            </div>
-        </div>
-        @endforeach
-        @else
-        <p>No comments available.</p>
-        @endif
-    </div>
+                        @foreach ($article->comments as $comment)
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $comment->user->name }}</h5>
+                                <p class="card-text">{{ $comment->content }}</p>
+                                <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
+                            </div>
+                        </div>
+                        @endforeach
+                        @else
+                        <p>No comments available.</p>
+                        @endif
+                    </div>
 
-    <div class="mt-4">
-        <h3>Add a Comment</h3>
-        <form action="{{ route('comments.add') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="username">Name</label>
-                <input type="text" name="username" id="username" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="content">Comment</label>
-                <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Comment</button>
-        </form>
-    </div>
-</div>
+                    <div class="mt-4">
+                        <h3>Add a Comment</h3>
+                        <form action="{{ route('comments.add') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="username">Name</label>
+                                <input type="text" name="username" id="username" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="content">Comment</label>
+                                <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Add Comment</button>
+                        </form>
+                        <br>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -69,13 +71,19 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">{{ __('Latest Articles') }}</div>
+                <div class="card-header">{{ __('Related Articles') }}</div>
                 <div class="card-body">
-                    <ul>
-                        @foreach ($articles->sortByDesc('created_at')->take(5) as $article)
-                        <li><a href="{{ route('articles.show', $article->id) }}" class="link-style">{{ $article->title }}</a></li>
+                    <ol type="I">
+                        @if ($relatedArticles && $relatedArticles->count() > 0)
+
+                        @foreach ($relatedArticles as $relatedArticle)
+                        <li><a href="{{ route('articles.show', $relatedArticle->id) }}">{{ $relatedArticle->title }}</a></li>
                         @endforeach
-                    </ul>
+
+                        @else
+                        <p>No related articles available.</p>
+                        @endif
+                    </ol>
                 </div>
             </div>
             <br>

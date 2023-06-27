@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <div class="container">
@@ -10,7 +10,7 @@
         <h1>All Categories</h1>
 
         <div class="mb-3">
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">Add Category</a>
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">Add Category</a>
         </div>
 
         <table class="table">
@@ -28,10 +28,10 @@
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->description }}</td>
                         <td>
-                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary">Edit</a>
                         </td>
                         <td>
-                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
+                            <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Delete</button>

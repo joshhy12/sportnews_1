@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ class CommentController extends Controller
     {
         $request->validate([
             'content' => 'required',
-            'user_id' => 'required',
+            //  'user_id' => 'required',
             'article_id' => 'required',
             'username' => 'required',
         ]);
@@ -57,6 +58,4 @@ class CommentController extends Controller
 
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
-
-
 }

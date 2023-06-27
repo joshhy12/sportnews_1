@@ -39,4 +39,18 @@ body {
     object-fit: contain; /* Scale down proportionally to fit within the container */
   }
 
+  .dropdown-item {
+    color: #000; /* Set the text color */
+  }
+
+  .dropdown-item:hover, .dropdown-item:focus {
+    background-color: #f8f9fa; /* Set the background color on hover/focus */
+    color: #000; /* Set the text color on hover/focus */
+  }
+
+  .dropdown-item:active {
+    background-color: #e9ecef; /* Set the background color when active/pressed */
+    color: #000; /* Set the text color when active/pressed */
+  }
+
 

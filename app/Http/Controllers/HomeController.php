@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
-use App\Models\Admin;
-use Carbon\Carbon;
+use App\Models\Article;
+
+
 
 class HomeController extends Controller
 {
@@ -28,9 +28,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
-        return view('home', ['articles' => $articles]);
+        $articles = Article::orderBy('created_at', 'desc')->get();
+        $categories = Category::all();
+
+          // Retrieve users
+          $users = User::all();
+
+        return view('welcome', compact('articles', 'categories'));
     }
-
-
 }

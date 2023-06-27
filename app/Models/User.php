@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Article;
+use App\Models\Admin;
+
+
 
 class User extends Authenticatable
 {
@@ -28,12 +32,6 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
-    public function isAdmin()
-{
-    return $this->role === 'admin';
-}
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -64,4 +62,10 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

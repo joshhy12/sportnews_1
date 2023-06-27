@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container">
     <h1>Edit Category</h1>
 
-    <form method="POST" action="{{ route('categories.update', $category->id) }}">
+    <form method="POST" action="{{ route('admin.categories.update', $category->id) }}">
         @csrf
         @method('PUT')
 

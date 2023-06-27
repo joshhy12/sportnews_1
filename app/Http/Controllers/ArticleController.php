@@ -96,13 +96,24 @@ class ArticleController extends Controller
     }
 
 
-public function show($id)
-{
-    $article = Article::findOrFail($id);
-    $articles = Article::orderBy('created_at', 'desc')->take(5)->get();
-    $categories = Category::all();
-    return view('articles.article-details', compact('article', 'articles', 'categories'));
-}
+
+    public function show(Article $article)
+    {
+
+        $articles = Article::orderBy('created_at', 'desc')->take(5)->get();
+        $categories = Category::all();
+        // Fetch the related articles based on the category tag of the current article
+        if ($article->category) {
+            $relatedArticles = Article::whereHas('category', function ($query) use ($article) {
+                $query->where('name', $article->category->name);
+            })->where('id', '!=', $article->id)->take(5)->get();
+        } else {
+            $relatedArticles = [];
+        }
+
+        return view('articles.article-details', compact('article', 'relatedArticles', 'articles', 'relatedArticles','categories' ));
+    }
+
 
 
 
