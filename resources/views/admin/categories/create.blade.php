@@ -11,7 +11,7 @@
 
         <h1>Create Category</h1>
 
-        <form method="POST" action="{{ route('categories.store') }}">
+        <form method="POST" action="{{ route('admin.categories.store') }}">
             @csrf
 
             <div class="form-group">
@@ -25,7 +25,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Create Category</button>
-            <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 @endsection

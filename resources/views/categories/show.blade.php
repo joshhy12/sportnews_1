@@ -9,7 +9,7 @@
 </head>
 
 <body .fixed-div { position: sticky; top: 0px; /* Adjust the value as needed */ }>
-    @extends('layouts.admin')
+    @extends('layouts.home')
     @section('content')
 
     <div class="row justify-content-center">

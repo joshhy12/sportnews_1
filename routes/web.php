@@ -28,16 +28,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 });
 
+///////////////////////////////Admin Penel//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
+//Admin Penel
 Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'authorize'])->name('admin.dashboard');
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
     // User routes
     Route::get('/admin/users', [AdminController::class, 'manageUsers'])->name('admin.users.index');
     Route::get('/admin/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
@@ -51,7 +49,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Category routes
     Route::get('/admin/categories', [AdminController::class, 'manageCategories'])->name('admin.categories.index');
     Route::get('admin/categories/create', [AdminController::class, 'createCategory'])->name('admin.categories.create');
-    Route::post('admin/categories', [AdminController::class, 'store'])->name('admin.categories.store');
+    Route::post('admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
     Route::get('admin/categories/{category}/edit', [AdminController::class, 'editCategory'])->name('admin.categories.edit');
     Route::put('admin/categories/{category}', [AdminController::class, 'updateCategory'])->name('admin.categories.update');
     Route::get('admin/categories/{category}', [AdminController::class, 'showCategory'])->name('admin.categories.show');
@@ -60,36 +58,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     // Article routes
-    Route::get('/admin/articles/create', [ArticleController::class, 'create'])->name('admin.articles.create');
-
-    Route::get('/admin/articles/create', [AdminController::class, 'createArticles'])->name('admin.articles.create');
-    Route::get('/admin/articles/create', [ArticleController::class, 'create'])->name('admin.articles.create');
-    Route::get('/admin/articles', [AdminController::class, 'manageArticles'])->name('admin.articles.index');
-    Route::get('/admin/articles/create', [ArticleController::class, 'create'])->name('admin.articles.createForm');
-    Route::post('/admin/articles', [ArticleController::class, 'store'])->name('admin.articles.store');
-    Route::get('/admin/articles/{article}/edit', [ArticleController::class, 'edit'])->name('admin.articles.edit');
-    Route::put('/admin/articles/{article}', [ArticleController::class, 'update'])->name('admin.articles.update');
-    Route::get('/admin/articles/{article}', [ArticleController::class, 'show'])->name('admin.articles.show');
-    Route::delete('/admin/articles/{article}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
+    Route::get('/admin/articles/create', [AdminController::class, 'createArticle'])->name('admin.articles.create');
+    Route::get('/admin/articles', [AdminController::class, 'manageArticle'])->name('admin.articles.index');
+    Route::get('/admin/articles/create', [AdminController::class, 'createArticle'])->name('admin.articles.createForm');
+    Route::post('/admin/articles', [AdminController::class, 'storeArticle'])->name('admin.articles.store');
+    Route::get('/admin/articles/{article}/edit', [AdminController::class, 'editArticle'])->name('admin.articles.edit');
+    Route::put('/admin/articles/{article}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
+    Route::get('/admin/articles/{article}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
+    Route::delete('/admin/articles/{article}', [AdminController::class, 'destroyArticle'])->name('admin.articles.destroy');
 });
 
-
-
-
-
-
-
-
-//Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+//////////////////////////////Users//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Articles
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/search', [ArticleController::class, 'search'])->name('articles.search');
-Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
-Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.editForm');
-Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
-Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-// Other routes...
-Route::get('/articles/search', [ArticleController::class, 'search'])->name('articles.search');
+
 
 // Categories
 Route::get('/', [CategoryController::class, 'index'])->name('home');
@@ -101,16 +85,13 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //comment
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 Route::post('/comments', [CommentController::class, 'addComment'])->name('comments.add');
 
 //About
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
-// ...
 
-
-
+//User
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -129,3 +110,13 @@ Route::get('password/reset', 'App\Http\Controllers\Auth\ForgotPasswordController
 Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'App\Http\Controllers\Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('password.update');
+
+
+
+
+
+
+
+
+
+

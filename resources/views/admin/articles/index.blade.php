@@ -9,6 +9,10 @@
         @endif
         <h1>All Articles</h1>
 
+        <div class="mb-3">
+            <a href="{{ route('admin.articles.createForm') }}" class="btn btn-primary">Add Articles</a>
+        </div>
+
         <table class="table">
             <thead>
                 <tr>
@@ -30,7 +34,7 @@
 
                         </td>
                         <td>
-                            <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
+                            <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Delete</button>

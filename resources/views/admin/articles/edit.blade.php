@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <div class="container">
@@ -10,7 +10,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('articles.update', $article->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('admin.articles.update', $article->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-group">

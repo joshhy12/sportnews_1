@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <div class="container">
@@ -8,7 +8,7 @@
         <h2>Articles</h2>
         <ul>
             @foreach ($category->articles as $article)
-                <li><a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a></li>
+                <li><a href="{{ route('admin.articles.show', $article->id) }}">{{ $article->title }}</a></li>
             @endforeach
         </ul>
     </div>

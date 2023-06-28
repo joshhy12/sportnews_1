@@ -39,12 +39,7 @@
                 <a class="navbar-brand" href="{{ url('about') }}">
                     {{ config('', 'About') }}
                 </a>
-                <a class="navbar-brand" href="{{ url('categories') }}">
-                    {{ config('', 'Categories') }}
-                </a>
-                <a class="navbar-brand" href="{{ url('articles') }}">
-                    {{ config('', 'Articles') }}
-                </a>
+
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
