@@ -40,18 +40,24 @@ class ArticleController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('query');
+        $categories = Category::all();
+        $searchTitle = $request->input('searchtitle');
 
-        if ($query) {
-            $articles = Article::whereHas('category', function ($categoryQuery) use ($query) {
-                $categoryQuery->where('name', 'like', "%$query%");
-            })
-                ->orderBy('created_at', 'desc')
-                ->get();
-        } else {
-            $articles = collect(); // Empty collection when query is empty
+        $articles = Article::where('title', 'like', '%' . $searchTitle . '%')->get();
+
+        $relatedArticles = [];
+
+        if ($articles->count() > 0) {
+            $article = $articles->first();
+
+            if ($article->category) {
+                $relatedArticles = Article::whereHas('category', function ($query) use ($article) {
+                    $query->where('name', $article->category->name);
+                })->where('id', '!=', $article->id)->take(5)->get();
+            }
         }
 
-        return view('articles.search', compact('articles', 'query'));
+        return view('articles.search', compact('articles', 'searchTitle', 'relatedArticles', 'categories'));
     }
+
 }

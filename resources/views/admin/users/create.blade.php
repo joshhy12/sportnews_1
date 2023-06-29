@@ -53,9 +53,9 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
                             <div class="col-md-6">
                                 <select id="role" class="form-control @error('role') is-invalid @enderror" name="role" required>
-                                    <option value="admin">Admin</option>
-                                    <br>
                                     <option value="user">User</option>
+                                    <br>
+                                    <option value="admin">Admin</option>
                                 </select>
                                 @error('role')
                                 <span class="invalid-feedback" role="alert">

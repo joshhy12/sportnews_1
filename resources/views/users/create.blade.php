@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.home')
 
 @section('content')
 <div class="container">
@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Create User') }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.users.store') }}">
+                    <form method="POST" action="{{ route('users.store') }}">
                         @csrf
                         @method('POST')
                         <div class="form-group row">
@@ -53,8 +53,9 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
                             <div class="col-md-6">
                                 <select id="role" class="form-control @error('role') is-invalid @enderror" name="role" required>
-                                    <option value="admin">Admin</option>
                                     <option value="user">User</option>
+                                    <br>
+                                    <option value="admin">Admin</option>
                                 </select>
                                 @error('role')
                                 <span class="invalid-feedback" role="alert">
@@ -68,7 +69,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
-                                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Cancel</a>
+                                <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>
                             </div>
                         </div>
                     </form>

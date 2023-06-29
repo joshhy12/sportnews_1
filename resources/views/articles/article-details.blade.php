@@ -2,9 +2,17 @@
 
 @section('content')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/comments.css') }}">
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="{{ asset('javaScript/comments.js') }}"></script>
+
 <div class="container">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

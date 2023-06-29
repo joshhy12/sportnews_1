@@ -1,0 +1,36 @@
+
+a {
+    color: #24366b;
+    text-decoration: none; /* Remove underline */
+}
+
+a:hover {
+    color: rgb(31, 176, 238);
+}
+
+#articles-table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#articles-table td, #articles-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#articles-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#articles-table tr:hover {
+    background-color: #ddd;
+}
+
+#articles-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #628ff0;
+    color: white;
+}

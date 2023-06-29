@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label for="category">Category</label>
-                <select id="category" name="category_id" class="form-control">
+                <select id="category" name="category_id" class="form-control" required>
                     <option value="">Select a category</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -36,9 +36,20 @@
             </div>
             <div class="form-group">
                 <label for="published_at">Published At</label>
-                <input type="date" class="form-control" id="published_at" name="published_at">
+                <input type="datetime-local" class="form-control" id="published_at" name="published_at" value="{{ now()->format('Y-m-d\TH:i') }}">
             </div>
             <button type="submit" class="btn btn-primary">Create Article</button>
         </form>
     </div>
+
+    <script>
+    // Get the server's current time in UTC
+    var serverTime = new Date("{{ now()->toJSON() }}");
+
+    // Convert the server time to the local time zone
+    var localTime = serverTime.toLocaleString("en-US", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+
+    // Set the local time in the published_at field
+    document.getElementById('published_at').value = localTime.slice(0, 16);
+    </script>
 @endsection

@@ -23,15 +23,18 @@
     <script src="{{ asset('JavaScript/myScript.js') }}"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </head>
 
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('#') }}">
+                <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -66,6 +69,14 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('admin.articles.index') }}">Manage Articles</a>
                                 <a class="dropdown-item" href="{{ route('admin.articles.createForm') }}">Add Article</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Comment
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ route('admin.comments.index') }}">Manage Comment</a>
                             </div>
                         </li>
                         <!-- Add other menu items with dropdowns and "Add" options -->

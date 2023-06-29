@@ -42,7 +42,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
     Route::get('/admin/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
     Route::put('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
-    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
     Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
 
 
@@ -60,22 +59,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Article routes
     Route::get('/admin/articles/create', [AdminController::class, 'createArticle'])->name('admin.articles.create');
     Route::get('/admin/articles', [AdminController::class, 'manageArticle'])->name('admin.articles.index');
+    Route::get('/admin/articles/search', [AdminController::class, 'searchArticles'])->name('admin.articles.search');
     Route::get('/admin/articles/create', [AdminController::class, 'createArticle'])->name('admin.articles.createForm');
     Route::post('/admin/articles', [AdminController::class, 'storeArticle'])->name('admin.articles.store');
     Route::get('/admin/articles/{article}/edit', [AdminController::class, 'editArticle'])->name('admin.articles.edit');
     Route::put('/admin/articles/{article}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
     Route::get('/admin/articles/{article}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
+    Route::get('/admin/articles/{id}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
     Route::delete('/admin/articles/{article}', [AdminController::class, 'destroyArticle'])->name('admin.articles.destroy');
+
+
+    Route::get('/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
+    Route::put('/comments/{comment}/approve', [AdminController::class, 'approveComment'])->name('admin.comments.approve');
+    Route::get('/admin/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
+
+
+
 });
 
 //////////////////////////////Users//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Articles
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+//Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/search', [ArticleController::class, 'search'])->name('articles.search');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 
+
 // Categories
+//look for the index of category is different from idex of articles
 Route::get('/', [CategoryController::class, 'index'])->name('home');
 Route::resource('categories', CategoryController::class)->except(['show']);
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
@@ -84,8 +95,9 @@ Route::get('/categories/{category}', [CategoryController::class, 'show'])->name(
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //comment
-Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::post('/comments', [CommentController::class, 'addComment'])->name('comments.add');
+Route::post('/comments/add', [CommentController::class, 'addComment'])->name('comments.add');
+
+
 
 //About
 Route::get('/about', [AboutController::class, 'index'])->name('about');
@@ -93,6 +105,11 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 //User
 Auth::routes();
+
+Route::get('/users/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/update', [UserController::class, 'update'])->name('users.update');
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -110,13 +127,3 @@ Route::get('password/reset', 'App\Http\Controllers\Auth\ForgotPasswordController
 Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'App\Http\Controllers\Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('password.update');
-
-
-
-
-
-
-
-
-
-

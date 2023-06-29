@@ -3,6 +3,8 @@
 @extends('layouts.home')
 
 @section('content')
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,18 +102,7 @@ html {
     </div>
   </div>
 
-  <div class="column">
-    <div class="card">
-    <img src="{{ asset('storage/images/team1.jpg') }}"  alt="Mike" style="width:100%">
-      <div class="container">
-        <h2>John Doe</h2>
-        <p class="title">Designer</p>
-        <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-        <p>example@example.com</p>
-        <p><button class="button">Contact</button></p>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 </body>

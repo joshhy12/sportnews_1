@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.home')
 
 @section('content')
 <div class="container">
@@ -11,7 +11,7 @@
     <h1>All Users</h1>
 
     <div class="mb-3">
-        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">{{ __('Add User') }}</a>
+        <a href="{{ route('users.create') }}" class="btn btn-primary">{{ __('Add User') }}</a>
     </div>
 
     <table class="table">
