@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CommentController;
+
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AdminController as Admin;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CommentController;
+
 
 // Public routes accessible to all users
 
@@ -72,9 +74,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
     Route::put('/comments/{comment}/approve', [AdminController::class, 'approveComment'])->name('admin.comments.approve');
     Route::get('/admin/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
-
-
-
 });
 
 //////////////////////////////Users//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +94,19 @@ Route::get('/categories/{category}', [CategoryController::class, 'show'])->name(
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //comment
-Route::post('/comments/add', [CommentController::class, 'addComment'])->name('comments.add');
+//Route::post('/comments/add', [CommentController::class, 'addComment'])->name('comments.add');
+
+// Comment Routes
+Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::post('/comments/add', [CommentController::class, 'add'])->name('comments.add');
+    Route::put('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+});
+
+
 
 
 

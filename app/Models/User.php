@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Article;
 use App\Models\Admin;
+use App\Models\Comment;
 
 
 
@@ -67,5 +68,10 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+
+
 
 class CommentController extends Controller
 {
 
 
-    public function addComment(Request $request)
+
+    public function store(Request $request, Article $article)
     {
         $request->validate([
             'content' => 'required',
@@ -18,24 +22,56 @@ class CommentController extends Controller
         ]);
 
         $comment = new Comment([
-            'content' => $request->content,
-            'article_id' => $request->article_id,
+            'content' => $request->input('content'),
         ]);
 
-        // Check if the user is logged in
-        if (auth()->check()) {
-            // If logged in, associate the comment with the logged-in user
-            $comment->user_id = auth()->user()->id;
-            $comment->username = auth()->user()->name; // Set the username from the logged-in user
-        } else {
-            // If not logged in, set the username from the form input
-            $comment->username = $request->username;
-        }
-
+        $comment->user_id = auth()->user()->id;
+        $comment->article_id = $article->id;
         $comment->save();
 
-        return redirect()->back()->with('success', 'Comment added successfully.');
+        return back()->with('success', 'Comment submitted. Please wait for admin approval.');
     }
 
+    public function index()
+    {
+        $comments = Comment::all();
+        return view('comments.index', compact('comments'));
+    }
 
+    public function approve(Comment $comment)
+    {
+        $comment->approved = true;
+        $comment->save();
+
+        return back()->with('success', 'Comment approved successfully.');
+    }
+
+    public function destroy(Comment $comment)
+    {
+        $comment->delete();
+
+        return back()->with('success', 'Comment deleted successfully.');
+    }
+
+    public function add(Request $request)
+    {
+        // Validate the comment data
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'content' => 'required',
+            'article_id' => 'required',
+        ]);
+
+        // Create a new comment instance
+        $comment = new Comment();
+        $comment->user_id = auth()->user()->id; // Assuming you have authentication and want to associate the comment with the authenticated user
+        $comment->article_id = $request->input('article_id'); // Assuming you have the article_id available in the request
+        $comment->content = $validatedData['content'];
+        // Other properties of the comment, if any
+
+        // Save the comment
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment added successfully. Waiting for admin approval.');
+    }
 }

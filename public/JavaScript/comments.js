@@ -1,43 +1,59 @@
 // comments.js
 
 // Wait for the document to be ready
-document.addEventListener('DOMContentLoaded', function () {
-    // Get the comment form element
-    var commentForm = document.querySelector('#comment-form');
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the comment form element
+  var commentForm = document.getElementById('comment-form');
 
-    // Add an event listener for form submission
-    commentForm.addEventListener('submit', function (event) {
-      event.preventDefault(); // Prevent the form from submitting
+  // Add a submit event listener to the comment form
+  commentForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
 
-      // Get the form data
-      var formData = new FormData(commentForm);
+    // Disable the submit button while the comment is being submitted
+    var submitButton = commentForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
 
-      // Perform any necessary validation here
+    // Get the comment data from the form
+    var formData = new FormData(commentForm);
 
-      // Perform an AJAX request to submit the form data
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', commentForm.action);
-      xhr.setRequestHeader('X-CSRF-TOKEN', commentForm.querySelector('input[name="_token"]').value);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            // Handle a successful response
-            var response = JSON.parse(xhr.responseText);
-            if (response.success) {
-              // Clear the form fields
-              commentForm.reset();
-              // Display a success message or update the UI
-              alert('Comment added successfully!');
-            } else {
-              // Handle a failed submission
-              alert('Comment submission failed.');
-            }
-          } else {
-            // Handle a non-200 HTTP status
-            alert('Error: ' + xhr.status);
-          }
-        }
-      };
-      xhr.send(formData);
+    // Send a POST request to the server to add the comment
+    fetch(commentForm.action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(function(response) {
+      // Re-enable the submit button
+      submitButton.disabled = false;
+
+      if (response.ok) {
+        // Comment was added successfully
+        commentForm.reset(); // Reset the form
+        showSuccessMessage('Comment added successfully. Waiting for admin approval.');
+      } else {
+        // There was an error adding the comment
+        showErrorMessage('Failed to add comment. Please try again.');
+      }
+    })
+    .catch(function(error) {
+      // Re-enable the submit button
+      submitButton.disabled = false;
+
+      // Display an error message
+      showErrorMessage('An error occurred. Please try again later.');
     });
   });
+
+  // Function to show a success message
+  function showSuccessMessage(message) {
+    var successAlert = document.getElementById('success-alert');
+    successAlert.innerText = message;
+    successAlert.style.display = 'block';
+  }
+
+  // Function to show an error message
+  function showErrorMessage(message) {
+    var errorAlert = document.getElementById('error-alert');
+    errorAlert.innerText = message;
+    errorAlert.style.display = 'block';
+  }
+});

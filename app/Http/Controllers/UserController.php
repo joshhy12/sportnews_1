@@ -31,9 +31,8 @@ class UserController extends Controller
             $user->password = bcrypt($validatedData['password']);
         }
 
-        $user->update();
+        $user->save();
 
         return redirect()->route('users.edit')->with('success', 'Account updated successfully.');
     }
-
 }

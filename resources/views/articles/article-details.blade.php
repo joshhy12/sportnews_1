@@ -5,7 +5,9 @@
 <link rel="stylesheet" href="{{ asset('css/comments.css') }}">
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
 <script src="{{ asset('javaScript/comments.js') }}"></script>
+
 
 <div class="container">
     @if (session('success'))
@@ -28,7 +30,6 @@
                     <div class="mt-4">
                         <h3>Comments</h3>
                         @if ($article->comments && $article->comments->count() > 0)
-
                         @foreach ($article->comments as $comment)
                         <div class="card mt-2">
                             <div class="card-body">
@@ -45,7 +46,7 @@
 
                     <div class="mt-4">
                         <h3>Add a Comment</h3>
-                        <form action="{{ route('comments.add') }}" method="POST">
+                        <form id="comment-form" action="{{ route('comments.add') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="username">Name</label>
@@ -59,7 +60,10 @@
                             <button type="submit" class="btn btn-primary">Add Comment</button>
                         </form>
                         <br>
+                        <div id="comment-success" class="alert alert-success" style="display: none;"></div>
+                        <div id="comment-error" class="alert alert-danger" style="display: none;"></div>
                     </div>
+
                 </div>
 
             </div>
@@ -83,11 +87,9 @@
                 <div class="card-body">
                     <ol type="I">
                         @if ($relatedArticles && $relatedArticles->count() > 0)
-
                         @foreach ($relatedArticles as $relatedArticle)
                         <li><a href="{{ route('articles.show', $relatedArticle->id) }}">{{ $relatedArticle->title }}</a></li>
                         @endforeach
-
                         @else
                         <p>No related articles available.</p>
                         @endif

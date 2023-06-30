@@ -54,17 +54,26 @@ class AdminController extends Controller
         // Update the user's name
         $user->name = $request->input('name');
 
+        // Check if the isAdmin checkbox is checked
+        $isAdmin = $request->input('isAdmin') ? true : false;
+
+        // Update the isAdmin field only if the user is authorized to do so
+        if (auth()->user()->isAdmin) {
+            $user->isAdmin = $isAdmin;
+        }
+
         // Save the updated user
         $user->save();
 
         // Redirect to the appropriate page or show a success message
-        // Redirect to the users index page or show success message
         if ($user) {
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
         } else {
             return redirect()->back()->with('error', 'Failed to update user.');
         }
     }
+
+
 
 
     public function storeUser(Request $request)
