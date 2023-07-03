@@ -17,6 +17,7 @@ class Comment extends Model
         'user_id',
         'username',
         'article_id',
+        'status',
     ];
 
     public function user()
@@ -33,9 +34,4 @@ class Comment extends Model
     {
         return $this->hasMany(Comment::class);
     }
-
-
-
-
-
 }
