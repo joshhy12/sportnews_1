@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article</title>
+
+    <title>Categories</title>
 </head>
 
 <body .fixed-div { position: sticky; top: 0px; /* Adjust the value as needed */ }>
     @extends('layouts.home')
     @section('content')
 
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <script src="{{ asset('JavaScript/myScript.js') }}"></script>
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -50,11 +55,11 @@
             <div class="card">
                 <div class="card-header">{{ __('Related Articles of Category') }}</div>
                 <div class="card-body">
-                <ul>
-                            @foreach ($articles as $article)
-                            <li><a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a></li>
-                            @endforeach
-                        </ul>
+                    <ul>
+                        @foreach ($articles as $article)
+                        <li><a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a></li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
             <br>
@@ -74,6 +79,6 @@
 
         </div>
     </div>
-</div>
-</div>
-@endsection
+    </div>
+    </div>
+    @endsection

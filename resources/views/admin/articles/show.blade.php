@@ -13,7 +13,7 @@
                     <h1>{{ $article->title }}</h1>
 
                     <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image">
-                    <p>{{ $article->content }}</p>
+                    <p> {!! $article->content !!} </p>
                     <p>Published on: {{ $article->published_at }}</p>
                     <p>Category: {{ $article->category->name }}</p>
 

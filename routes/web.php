@@ -97,17 +97,13 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //Route::post('/comments/add', [CommentController::class, 'addComment'])->name('comments.add');
 
 // Comment Routes
-Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
-    Route::post('/comments/add', [CommentController::class, 'add'])->name('comments.add');
-    Route::put('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-});
+//Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
+//Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
 
 
+Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+Route::post('/comments', [ArticleController::class, 'storeComment'])->name('comments.store');
 
 
 //About

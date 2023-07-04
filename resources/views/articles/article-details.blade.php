@@ -3,9 +3,8 @@
 @section('content')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/comments.css') }}">
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-
 <script src="{{ asset('javaScript/comments.js') }}"></script>
 
 
@@ -23,7 +22,7 @@
                     <h1>{{ $article->title }}</h1>
 
                     <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image">
-                    <p>{{ $article->content }}</p>
+                    <p>{!! $article->content !!}</p>
                     <p>Published on: {{ $article->published_at }}</p>
                     <p>Category: {{ $article->category->name }}</p>
 
@@ -44,25 +43,27 @@
                         @endif
                     </div>
 
-                    <div class="mt-4">
+                    <!-- ... -->
+
+                    <div>
                         <h3>Add a Comment</h3>
-                        <form id="comment-form" action="{{ route('comments.add') }}" method="POST">
+                        <form id="comment-form" data-article-id="{{ $article->id }}">
                             @csrf
-                            <div class="form-group">
+                            <input type="hidden" name="article_id" value="{{ $article->id }}">
+                            <div>
                                 <label for="username">Name</label>
-                                <input type="text" name="username" id="username" class="form-control" required>
+                                <input type="text" name="username" id="username" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="content">Comment</label>
-                                <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
+                                <textarea name="content" id="content" rows="3" required></textarea>
                             </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary">Add Comment</button>
+                            <button type="submit">Add Comment</button>
                         </form>
-                        <br>
-                        <div id="comment-success" class="alert alert-success" style="display: none;"></div>
-                        <div id="comment-error" class="alert alert-danger" style="display: none;"></div>
                     </div>
+
+                    <!-- ... -->
+
 
                 </div>
 
@@ -111,5 +112,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('javaScript/comments.js') }}"></script>
+
 </div>
 @endsection
