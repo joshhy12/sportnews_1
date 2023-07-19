@@ -341,6 +341,15 @@ class AdminController extends Controller
 
     ///////////////////////////////////////////////////////////////
     //Comment
+
+
+    public function commentcreate()
+    {
+        $articles = Article::all();
+
+        return view('comments.create', compact('articles'));
+    }
+
     public function comment(Article $article, Request $request)
     {
         // Validate the comment data

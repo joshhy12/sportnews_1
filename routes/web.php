@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ArticleController;
-
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AdminController as Admin;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
+
 
 
 // Public routes accessible to all users
@@ -67,13 +67,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/articles/{article}/edit', [AdminController::class, 'editArticle'])->name('admin.articles.edit');
     Route::put('/admin/articles/{article}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
     Route::get('/admin/articles/{article}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
-    Route::get('/admin/articles/{id}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
+  //  Route::get('/admin/articles/{id}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
     Route::delete('/admin/articles/{article}', [AdminController::class, 'destroyArticle'])->name('admin.articles.destroy');
 
 
-    Route::get('/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
-    Route::put('/comments/{comment}/approve', [AdminController::class, 'approveComment'])->name('admin.comments.approve');
+    Route::post('/admin/comments', [AdminController::class, 'store'])->name('admin.comments.store');
+    Route::get('/admin/comments/create', [AdminController::class, 'commentcreate'])->name('admin.comments.create');
     Route::get('/admin/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
+    Route::post('/admin/comments/{comment}/approve', [AdminController::class, 'approveComment'])->name('admin.comments.approve');
+
+
 });
 
 //////////////////////////////Users//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,27 +94,19 @@ Route::resource('categories', CategoryController::class)->except(['show']);
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 //home
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-//comment
-//Route::post('/comments/add', [CommentController::class, 'addComment'])->name('comments.add');
 
 // Comment Routes
-Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
-    Route::post('/comments/add', [CommentController::class, 'add'])->name('comments.add');
-    Route::put('/comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-});
 
 
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
 
 
 //About
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::post('/submit-form', 'ContactController@submit')->name('contact.submit');
 
 
 //User

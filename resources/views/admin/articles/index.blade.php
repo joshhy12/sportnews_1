@@ -38,7 +38,7 @@
             <tr>
                 <td>{{ $count }}</td>
                 <td><a href="{{ route('admin.articles.show', $article->id) }}">{{ $article->title }}</a></td>
-                <td>{{ $article->content }}</td>
+                <td>{!! $article->content !!}</td> <!-- Update this line -->
                 <td>{{ $article->category->name }}</td>
                 <td>
                     <a href="{{ route('admin.articles.edit', $article->id) }}" class="btn btn-primary">Edit</a>

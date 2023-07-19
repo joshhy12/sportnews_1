@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
+use App\Models\Comment;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Admin;
@@ -58,6 +59,24 @@ class ArticleController extends Controller
         }
 
         return view('articles.search', compact('articles', 'searchTitle', 'relatedArticles', 'categories'));
+    }
+
+
+
+    public function addComment(Request $request, Article $article)
+    {
+        $request->validate([
+            'username' => 'required',
+            'content' => 'required',
+        ]);
+
+        $comment = new Comment();
+        $comment->username = $request->input('username');
+        $comment->content = $request->input('content');
+        $comment->article_id = $article->id;
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment added successfully.');
     }
 
 }

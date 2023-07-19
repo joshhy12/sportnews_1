@@ -3,9 +3,8 @@
 @section('content')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/comments.css') }}">
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-
 <script src="{{ asset('javaScript/comments.js') }}"></script>
 
 
@@ -23,46 +22,50 @@
                     <h1>{{ $article->title }}</h1>
 
                     <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image">
-                    <p>{{ $article->content }}</p>
+                    <p>{!! $article->content !!}</p>
                     <p>Published on: {{ $article->published_at }}</p>
                     <p>Category: {{ $article->category->name }}</p>
 
                     <div class="mt-4">
-                        <h3>Comments</h3>
-                        @if ($article->comments && $article->comments->count() > 0)
-                        @foreach ($article->comments as $comment)
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $comment->user->name }}</h5>
-                                <p class="card-text">{{ $comment->content }}</p>
-                                <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
-                            </div>
-                        </div>
-                        @endforeach
-                        @else
-                        <p>No comments available.</p>
-                        @endif
-                    </div>
+    <h3>Comments</h3>
+    @if ($article->comments && $article->comments->count() > 0)
+        @foreach ($article->comments as $comment)
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $comment->username }}</h5> <!-- Use comment's username instead of user's name -->
+                    <p class="card-text">{{ $comment->content }}</p>
+                    <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
+                </div>
+            </div>
+        @endforeach
+    @else
+        <p>No comments available.</p>
+    @endif
+</div>
 
-                    <div class="mt-4">
+
+                    <!-- ... -->
+
+                    <div>
                         <h3>Add a Comment</h3>
-                        <form id="comment-form" action="{{ route('comments.add') }}" method="POST">
+                        <form action="{{ route('comments.store') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="article_id" value="{{ $article->id }}">
                             <div class="form-group">
                                 <label for="username">Name</label>
                                 <input type="text" name="username" id="username" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="content">Comment</label>
-                                <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
+                                <textarea name="content" id="content" rows="3" class="form-control" required></textarea>
                             </div>
-                            <br>
                             <button type="submit" class="btn btn-primary">Add Comment</button>
                         </form>
-                        <br>
-                        <div id="comment-success" class="alert alert-success" style="display: none;"></div>
-                        <div id="comment-error" class="alert alert-danger" style="display: none;"></div>
+
                     </div>
+
+                    <!-- ... -->
+
 
                 </div>
 
@@ -111,5 +114,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('javaScript/comments.js') }}"></script>
+
 </div>
 @endsection

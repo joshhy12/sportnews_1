@@ -4,6 +4,8 @@
     <div class="container">
         <h1>Comments</h1>
 
+        <a href="{{ route('admin.comments.create') }}" class="btn btn-primary mb-3">Add Comment</a>
+
         @if ($comments->count() > 0)
             <table class="table">
                 <thead>
@@ -34,6 +36,7 @@
                                 @if (!$comment->approved)
                                     <form action="{{ route('admin.comments.approve', $comment->id) }}" method="POST">
                                         @csrf
+                                        @method('PUT')
                                         <button type="submit" class="btn btn-primary">Approve</button>
                                     </form>
                                 @endif
