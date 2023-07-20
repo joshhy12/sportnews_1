@@ -18,7 +18,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
 
 
-
 // Public routes accessible to all users
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -67,6 +66,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/articles/{article}/edit', [AdminController::class, 'editArticle'])->name('admin.articles.edit');
     Route::put('/admin/articles/{article}', [AdminController::class, 'updateArticle'])->name('admin.articles.update');
     Route::get('/admin/articles/{article}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
+
   //  Route::get('/admin/articles/{id}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
     Route::delete('/admin/articles/{article}', [AdminController::class, 'destroyArticle'])->name('admin.articles.destroy');
 
@@ -76,6 +76,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
     Route::post('/admin/comments/{comment}/approve', [AdminController::class, 'approveComment'])->name('admin.comments.approve');
 
+
+
+    Route::get('/admin/articles/{id}', [AdminController::class, 'showArticle'])->name('admin.articles.show');
+    Route::delete('/admin/articles/{article}', [AdminController::class, 'destroyArticle'])->name('admin.articles.destroy');
+
+
+    Route::get('/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
+    Route::put('/comments/{comment}/approve', [AdminController::class, 'approveComment'])->name('admin.comments.approve');
+    Route::get('/admin/comments', [AdminController::class, 'showComments'])->name('admin.comments.index');
 
 });
 
@@ -94,6 +103,7 @@ Route::resource('categories', CategoryController::class)->except(['show']);
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 //home
+
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
@@ -102,11 +112,27 @@ Route::get('/categories/{category}', [CategoryController::class, 'show'])->name(
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+//comment
+//Route::post('/comments/add', [CommentController::class, 'addComment'])->name('comments.add');
+
+// Comment Routes
+//Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
+//Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+
+
+
+Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
+Route::post('/comments', [ArticleController::class, 'storeComment'])->name('comments.store');
+
 
 
 //About
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+
 Route::post('/submit-form', 'ContactController@submit')->name('contact.submit');
+
 
 
 //User

@@ -15,7 +15,10 @@
             </div>
         </div>
 
+
         <form action="{{ route('admin.comments.approve', $comment->id) }}" method="PUT">
+        <form action="{{ route('admin.comments.approve', $comment->id) }}" method="POST">
+
             @csrf
             <button type="submit" class="btn btn-primary">Approve Comment</button>
         </form>

@@ -58,6 +58,7 @@
     document.getElementById('published_at').value = localTime.slice(0, 16);
 
 
+
     // Get the input field
     var titleInput = document.getElementById('title');
 
@@ -72,6 +73,7 @@
         // Set the uppercase text as the value of the input field
         titleInput.value = uppercaseText;
     });
+
 </script>
 
 @endsection
