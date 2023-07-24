@@ -10,21 +10,22 @@
     <p>Category: {{ $article->category->name }}</p>
 
     <div class="mt-4">
-        <h3>Comments</h3>
-        @if ($article->comments && $article->comments->count() > 0)
-            @foreach ($article->comments as $comment)
-                <div class="card mt-2">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $comment->user->name }}</h5>
-                        <p class="card-text">{{ $comment->content }}</p>
-                        <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
-                    </div>
+    <h3>Comments</h3>
+    @if ($article->comments && $article->comments->count() > 0)
+        @foreach ($article->comments as $comment)
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $comment->username }}</h5> <!-- Use comment's username instead of user's name -->
+                    <p class="card-text">{{ $comment->content }}</p>
+                    <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
                 </div>
-            @endforeach
-        @else
-            <p>No comments available.</p>
-        @endif
-    </div>
+            </div>
+        @endforeach
+    @else
+        <p>No comments available.</p>
+    @endif
+</div>
+
 
     <div class="mt-4">
         <h3>Add a Comment</h3>

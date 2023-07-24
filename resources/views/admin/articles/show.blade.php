@@ -2,9 +2,18 @@
 
 @section('content')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-
+<link rel="stylesheet" href="{{ asset('css/comments.css') }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="{{ asset('javaScript/comments.js') }}"></script>
+
+
 <div class="container">
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -13,9 +22,33 @@
                     <h1>{{ $article->title }}</h1>
 
                     <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image">
-                    <p> {!! $article->content !!} </p>
+                    <p>{!! $article->content !!}</p>
                     <p>Published on: {{ $article->published_at }}</p>
                     <p>Category: {{ $article->category->name }}</p>
+
+                    <div class="mt-4">
+                        <h3>Comments</h3>
+                        @if ($article->comments && $article->comments->count() > 0)
+                        @foreach ($article->comments as $comment)
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $comment->username }}</h5> <!-- Use comment's username instead of user's name -->
+                                <p class="card-text">{{ $comment->content }}</p>
+                                <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
+                            </div>
+                        </div>
+                        @endforeach
+                        @else
+                        <p>No comments available.</p>
+                        @endif
+                    </div>
+
+
+                    <!-- ... -->
+
+
+
+                    <!-- ... -->
 
 
                 </div>
@@ -41,11 +74,9 @@
                 <div class="card-body">
                     <ol type="I">
                         @if ($relatedArticles && $relatedArticles->count() > 0)
-
                         @foreach ($relatedArticles as $relatedArticle)
                         <li><a href="{{ route('admin.articles.show', $relatedArticle->id) }}">{{ $relatedArticle->title }}</a></li>
                         @endforeach
-
                         @else
                         <p>No related articles available.</p>
                         @endif
@@ -67,5 +98,6 @@
             </div>
         </div>
     </div>
+
 </div>
 @endsection

@@ -79,4 +79,20 @@ class ArticleController extends Controller
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
 
+
+    public function storeComment(Request $request, Article $article)
+    {
+        $request->validate([
+            'username' => 'required',
+            'content' => 'required',
+        ]);
+
+        $comment = new Comment();
+        $comment->username = $request->input('username');
+        $comment->content = $request->input('content');
+        $comment->article_id = $article->id;
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment added successfully.');
+    }
 }
