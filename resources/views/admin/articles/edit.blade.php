@@ -34,7 +34,7 @@
         <input type="hidden" name="author_id" value="{{ $article->author_id }}">
         <div class="form-group">
             <label for="image">Image</label>
-            <input type="file" class="form-control-file" id="image" name="image">
+            <input type="file" class="form-control-file" id="image_url" name="image">
         </div>
         <div class="form-group">
             <label for="published_at">Published At</label>

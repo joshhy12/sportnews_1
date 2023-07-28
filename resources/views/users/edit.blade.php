@@ -3,11 +3,6 @@
 @section('content')
 <x-slot name="header">
     <div class="container">
-        @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-        @endif
 
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Edit Account') }}

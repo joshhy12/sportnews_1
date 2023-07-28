@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Article;
 
-
 class Comment extends Model
 {
     use HasFactory;
@@ -29,8 +28,5 @@ class Comment extends Model
         return $this->belongsTo(Article::class);
     }
 
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
+
 }

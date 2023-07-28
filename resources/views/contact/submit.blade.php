@@ -1,3 +1,5 @@
+<!-- resources/views/submit.blade.php -->
+
 @extends('layouts.home')
 
 @section('content')

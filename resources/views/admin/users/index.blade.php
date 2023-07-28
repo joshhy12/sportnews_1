@@ -24,11 +24,11 @@
     <table class="table">
         <thead>
             <tr>
-
                 <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Registered At</th>
+                <th>Admin</th> <!-- New column for the admin button -->
                 <th></th>
                 <th></th>
             </tr>
@@ -43,6 +43,13 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->created_at }}</td>
+                <td>
+                    @if ($user->isAdmin)
+                        <button type="button" class="btn btn-success">Admin</button>
+                    @else
+                        <button type="button" class="btn btn-warning">Not Admin</button>
+                    @endif
+                </td>
                 <td>
                     <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary">Edit</a>
                 </td>

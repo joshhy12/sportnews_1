@@ -14,11 +14,18 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $articles = Article::all(); // Retrieve all articles from the database
-        $categories = Category::all(); // Retrieve all categories from the database
+        if (!auth()->user()->isAdmin) {
+            abort(403, 'Unauthorized.');
+        }
+
+        // Your admin dashboard logic here...
+        // For example, retrieve all articles and categories from the database
+        $articles = Article::all();
+        $categories = Category::all();
+
+        // Return the admin dashboard view with the data
         return view('admin.dashboard', compact('articles', 'categories'));
     }
-
 
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -43,8 +50,17 @@ class AdminController extends Controller
         return view('admin.users.edit', compact('user'));
     }
 
-    public function updateUser(Request $request, User $user)
+
+    public function updateUser(Request $request, $id)
     {
+        // Find the user from the database based on the provided $id
+        $user = User::find($id);
+
+        // Check if the user exists before proceeding with the update
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required',
@@ -65,6 +81,11 @@ class AdminController extends Controller
         // Save the updated user
         $user->save();
 
+        // Update the user's role in the session if the isAdmin field has changed
+        if (auth()->check() && auth()->user()->id === $user->id) {
+            auth()->user()->isAdmin = $user->isAdmin;
+        }
+
         // Redirect to the appropriate page or show a success message
         if ($user) {
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
@@ -72,6 +93,7 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Failed to update user.');
         }
     }
+
 
 
 
@@ -342,34 +364,21 @@ class AdminController extends Controller
     ///////////////////////////////////////////////////////////////
     //Comment
 
-
-    public function commentcreate()
+    public function index()
     {
-        $articles = Article::all();
-
-        return view('comments.create', compact('articles'));
+        $comments = Comment::all(); // Fetch all comments from the database
+        return view('admin.comments.index', compact('comments'));
     }
+
 
     public function comment(Article $article, Request $request)
     {
         // Validate the comment data
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'comment' => 'required',
-        ]);
+        $pendingComments = Comment::where('status', 'pending')->get();
+        $approvedComments = Comment::where('status', 'approved')->get();
+        $deniedComments = Comment::where('status', 'denied')->get();
 
-        // Create a new comment
-        $comment = new Comment();
-        $comment->name = $request->input('name');
-        $comment->email = $request->input('email');
-        $comment->content = $request->input('comment');
-        $comment->approved = false; // Set the initial approval status to false
-
-        // Associate the comment with the article
-        $article->comments()->save($comment);
-
-        return redirect()->back()->with('success', 'Comment added successfully! It is pending approval.');
+        return view('admin.comments.index', compact('pendingComments', 'approvedComments', 'deniedComments'));
     }
 
     public function showComments()
@@ -378,11 +387,40 @@ class AdminController extends Controller
         return view('admin.comments.index', compact('comments'));
     }
 
-    public function approveComment(Comment $comment)
+    public function approveComment($id)
     {
-        $comment->approved = true;
+        $comment = Comment::findOrFail($id);
+        $comment->status = 1; // 1 represents 'approved'
         $comment->save();
 
         return redirect()->route('admin.comments.index')->with('success', 'Comment approved successfully.');
+    }
+
+    public function approved()
+    {
+        // Fetch only the approved comments from the database
+        $approvedComments = Comment::where('status', 1)->get();
+
+        return view('admin.comments.approved', compact('approvedComments'));
+    }
+
+
+
+    public function denyComment($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $comment->status = 0; // 0 represents 'pending' (you can also use 2 for 'denied' if you prefer)
+        $comment->save();
+
+        return redirect()->route('admin.comments.index')->with('success', 'Comment denied successfully.');
+    }
+
+
+    public function deleteComment($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+
+        return redirect()->route('admin.comments.index')->with('success', 'Comment deleted successfully.');
     }
 }

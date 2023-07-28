@@ -35,7 +35,7 @@
 
         <div class="form-group">
             <label for="image">Image</label>
-            <input type="file" class="form-control-file" id="image" name="image">
+            <input type="file" class="form-control-file" id="image_url" name="image">
         </div>
         <div class="form-group">
             <label for="published_at">Published At</label>
@@ -56,8 +56,6 @@
 
     // Set the local time in the published_at field
     document.getElementById('published_at').value = localTime.slice(0, 16);
-
-
 
     // Get the input field
     var titleInput = document.getElementById('title');

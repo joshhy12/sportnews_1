@@ -6,7 +6,7 @@
             {{ __('User Profile') }}
         </h4>
     </x-slot>
-
+<h1>User Profile</h1>
     <div class="container" >
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <div class="mb-4">

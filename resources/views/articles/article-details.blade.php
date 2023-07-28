@@ -1,12 +1,12 @@
 @extends('layouts.home')
-
 @section('content')
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/comments.css') }}">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-<script src="{{ asset('javaScript/comments.js') }}"></script>
 
+<link rel="stylesheet" href="{{ asset('css/Accordion.css') }}">
+<script src="{{ asset('javaScript/Accordion.js') }}"></script>
 
 <div class="container">
     @if (session('success'))
@@ -20,21 +20,23 @@
                 <div class="card-header">{{ __('Read Articles') }}</div>
                 <div class="container">
                     <h1>{{ $article->title }}</h1>
-
                     <img src="{{ Storage::url($article->image_url) }}" alt="{{ $article->title }}" class="article-image">
                     <p>{!! $article->content !!}</p>
                     <p>Published on: {{ $article->published_at }}</p>
                     <p>Category: {{ $article->category->name }}</p>
-
                     <div class="mt-4">
                         <h3>Comments</h3>
-                        @if ($article->comments && $article->comments->count() > 0)
-                        @foreach ($article->comments as $comment)
+                        @if ($approvedComments->count() > 0)
+                        @foreach ($approvedComments as $comment)
                         <div class="card mt-2">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $comment->username }}</h5> <!-- Use comment's username instead of user's name -->
+                                <h5 class="card-title">{{ $comment->username }}</h5>
                                 <p class="card-text">{{ $comment->content }}</p>
-                                <p class="card-text"><small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small></p>
+                                @if ($comment->status === 1)
+                                <span class="badge badge-success">Approved</span>
+                                @else
+                                <span class="badge badge-warning">Pending</span>
+                                @endif
                             </div>
                         </div>
                         @endforeach
@@ -42,10 +44,6 @@
                         <p>No comments available.</p>
                         @endif
                     </div>
-
-
-                    <!-- ... -->
-
                     <div>
                         <h3>Add a Comment</h3>
                         <form action="{{ route('comments.store') }}" method="POST">
@@ -61,12 +59,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Add Comment</button>
                         </form>
-
                     </div>
-
-                    <!-- ... -->
-
-
                 </div>
 
             </div>
@@ -112,9 +105,31 @@
                     </dl>
                 </div>
             </div>
+            <br>
+
+            <div class="card">
+                <div class="card-header">{{ __('More Details About') }}</div>
+
+
+                    <button class="accordion">Section 1</button>
+                    <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+
+                    <button class="accordion">Section 2</button>
+                    <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+
+                    <button class="accordion">Section 3</button>
+                    <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+
+
+            </div>
         </div>
     </div>
-    <script src="{{ asset('javaScript/comments.js') }}"></script>
-
+    <!-- <script src="{{ asset('javaScript/comments.js') }}"></script> -->
 </div>
 @endsection

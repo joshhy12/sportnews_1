@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\User;
 use App\Models\Admin;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB; // Import the DB facade
 
 
 class ArticleController extends Controller
@@ -17,25 +18,35 @@ class ArticleController extends Controller
     {
         $articles = Article::orderBy('created_at', 'desc')->get();
         $categories = Category::all();
-        return view('articles.index', compact('articles', 'categories'));
+        $approvedComments = [];
+
+        // Fetch the approved comments for each article
+        foreach ($articles as $article) {
+            $approvedComments[$article->id] = $article->comments->where('status', 'approved');
+        }
+
+        return view('articles.index', compact('articles', 'categories', 'approvedComments'));
     }
 
     public function show(Article $article)
     {
-
-        $articles = Article::orderBy('created_at', 'desc')->take(5)->get();
         $categories = Category::all();
+        $relatedArticles = [];
+
         // Fetch the related articles based on the category tag of the current article
         if ($article->category) {
             $relatedArticles = Article::whereHas('category', function ($query) use ($article) {
                 $query->where('name', $article->category->name);
             })->where('id', '!=', $article->id)->take(5)->get();
-        } else {
-            $relatedArticles = [];
         }
 
-        return view('articles.article-details', compact('article', 'relatedArticles', 'articles', 'relatedArticles', 'categories'));
+        // Fetch only the approved comments for the specific article
+        $approvedComments = DB::table('comments')->where('article_id', $article->id)->where('status', 1)->get();
+
+        return view('articles.article-details', compact('article', 'relatedArticles', 'approvedComments', 'categories'));
     }
+
+
 
 
 
@@ -61,38 +72,8 @@ class ArticleController extends Controller
         return view('articles.search', compact('articles', 'searchTitle', 'relatedArticles', 'categories'));
     }
 
-
-
-    public function addComment(Request $request, Article $article)
+    public function showComments(Article $article)
     {
-        $request->validate([
-            'username' => 'required',
-            'content' => 'required',
-        ]);
-
-        $comment = new Comment();
-        $comment->username = $request->input('username');
-        $comment->content = $request->input('content');
-        $comment->article_id = $article->id;
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Comment added successfully.');
-    }
-
-
-    public function storeComment(Request $request, Article $article)
-    {
-        $request->validate([
-            'username' => 'required',
-            'content' => 'required',
-        ]);
-
-        $comment = new Comment();
-        $comment->username = $request->input('username');
-        $comment->content = $request->input('content');
-        $comment->article_id = $article->id;
-        $comment->save();
-
-        return redirect()->back()->with('success', 'Comment added successfully.');
+        return view('articles.comments', compact('article'));
     }
 }

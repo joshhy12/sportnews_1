@@ -42,15 +42,6 @@
                         <p>No comments available.</p>
                         @endif
                     </div>
-
-
-                    <!-- ... -->
-
-
-
-                    <!-- ... -->
-
-
                 </div>
 
             </div>
