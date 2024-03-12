@@ -45,24 +45,9 @@
 
                     <!-- ... -->
 
-                    <div>
-                        <h3>Add a Comment</h3>
-                        <form id="comment-form" data-article-id="{{ $article->id }}">
-                            @csrf
-                            <input type="hidden" name="article_id" value="{{ $article->id }}">
-                            <div>
-                                <label for="username">Name</label>
-                                <input type="text" name="username" id="username" required>
-                            </div>
-                            <div>
-                                <label for="content">Comment</label>
-                                <textarea name="content" id="content" rows="3" required></textarea>
-                            </div>
-                            <button type="submit">Add Comment</button>
-                        </form>
-                    </div>
 
-                    <!-- ... -->
+
+                    <!-- I remove the comment option ... -->
 
 
                 </div>
